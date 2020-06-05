@@ -1,0 +1,157 @@
+Burkina_Faso not in world data
+Cape_Verde not in world data
+Central_African_Republic not in world data
+Cote_dIvoire not in world data
+Democratic_Republic_of_the_Congo not in world data
+Equatorial_Guinea not in world data
+Eswatini not in world data
+Guinea_Bissau not in world data
+Libya not in world data
+Sao_Tome_and_Principe not in world data
+Sierra_Leone not in world data
+South_Africa not in world data
+South_Sudan not in world data
+United_Republic_of_Tanzania not in world data
+Western_Sahara not in world data
+Antigua_and_Barbuda not in world data
+Bonaire, Saint Eustatius and Saba not in world data
+British_Virgin_Islands not in world data
+Cayman_Islands not in world data
+Costa_Rica not in world data
+Curaçao not in world data
+Dominican_Republic not in world data
+El_Salvador not in world data
+Falkland_Islands_(Malvinas) not in world data
+Puerto_Rico not in world data
+Saint_Kitts_and_Nevis not in world data
+Saint_Lucia not in world data
+Saint_Vincent_and_the_Grenadines not in world data
+Sint_Maarten not in world data
+Trinidad_and_Tobago not in world data
+Turks_and_Caicos_islands not in world data
+United_States_of_America not in world data
+United_States_Virgin_Islands not in world data
+Brunei_Darussalam not in world data
+Iran not in world data
+Laos not in world data
+Myanmar not in world data
+Saudi_Arabia not in world data
+South_Korea not in world data
+Sri_Lanka not in world data
+Syria not in world data
+Timor_Leste not in world data
+United_Arab_Emirates not in world data
+Vietnam not in world data
+Bosnia_and_Herzegovina not in world data
+Czechia not in world data
+Faroe_Islands not in world data
+Holy_See not in world data
+Isle_of_Man not in world data
+Kosovo not in world data
+Moldova not in world data
+North_Macedonia not in world data
+San_Marino not in world data
+United_Kingdom not in world data
+French_Polynesia not in world data
+New_Caledonia not in world data
+New_Zealand not in world data
+Northern_Mariana_Islands not in world data
+Papua_New_Guinea not in world data
+Cases_on_an_international_conveyance_Japan not in world data
+nan not in world data
+Antigua and Barbuda not in data
+American Samoa not in data
+Bosnia and Herzegovina not in data
+Burma not in data
+Solomon Islands not in data
+Brunei Darussalam not in data
+Sri Lanka not in data
+Democratic Republic of the Congo not in data
+Cayman Islands not in data
+Costa Rica not in data
+Central African Republic not in data
+Cape Verde not in data
+Cook Islands not in data
+Dominican Republic not in data
+Equatorial Guinea not in data
+El Salvador not in data
+Czech Republic not in data
+French Guiana not in data
+Falkland Islands (Malvinas) not in data
+Micronesia, Federated States of not in data
+French Polynesia not in data
+Iran (Islamic Republic of) not in data
+Cote d'Ivoire not in data
+Korea, Democratic People's Republic of not in data
+Kiribati not in data
+Korea, Republic of not in data
+Lao People's Democratic Republic not in data
+Libyan Arab Jamahiriya not in data
+Martinique not in data
+The former Yugoslav Republic of Macedonia not in data
+New Caledonia not in data
+Niue not in data
+Hong Kong not in data
+Northern Mariana Islands not in data
+Faroe Islands not in data
+Isle of Man not in data
+Macau not in data
+Mayotte not in data
+Ã
+land Islands not in data
+Norfolk Island not in data
+Cocos (Keeling) Islands not in data
+Bouvet Island not in data
+French Southern and Antarctic Lands not in data
+Heard Island and McDonald Islands not in data
+British Indian Ocean Territory not in data
+Christmas Island not in data
+United States Minor Outlying Islands not in data
+Vanuatu not in data
+Nauru not in data
+New Zealand not in data
+Papua New Guinea not in data
+Guinea-Bissau not in data
+Reunion not in data
+Republic of Moldova not in data
+Puerto Rico not in data
+Saudi Arabia not in data
+Saint Kitts and Nevis not in data
+South Africa not in data
+Sierra Leone not in data
+Saint Lucia not in data
+Syrian Arab Republic not in data
+Trinidad and Tobago not in data
+Tokelau not in data
+Tonga not in data
+Sao Tome and Principe not in data
+Tuvalu not in data
+Turkmenistan not in data
+United Republic of Tanzania not in data
+United Kingdom not in data
+United States not in data
+Burkina Faso not in data
+Saint Vincent and the Grenadines not in data
+British Virgin Islands not in data
+Viet Nam not in data
+United States Virgin Islands not in data
+Wallis and Futuna Islands not in data
+Samoa not in data
+Swaziland not in data
+Guadeloupe not in data
+Netherlands Antilles not in data
+United Arab Emirates not in data
+Timor-Leste not in data
+Pitcairn Islands not in data
+Palau not in data
+Marshall Islands not in data
+Saint Pierre and Miquelon not in data
+Saint Helena not in data
+San Marino not in data
+Turks and Caicos Islands not in data
+Western Sahara not in data
+Holy See (Vatican City) not in data
+Svalbard not in data
+Saint Martin not in data
+Saint Barthelemy not in data
+South Georgia South Sandwich Islands not in data
