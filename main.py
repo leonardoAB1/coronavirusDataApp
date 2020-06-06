@@ -463,7 +463,7 @@ def processData(select_second_country=False, day_number=-1):
         
  
     except:
-       mg.showinfo("Error", "Not Enough Data\n for Plotting \nTry another data source.")
+       mg.showinfo("Error", "Not Enough Data\n for Plotting \nTry another data source\n or check your internet connection.")
         
     
     else:
@@ -492,92 +492,96 @@ def clearFrame(frame):
 def displayMap():
     import pandas as pd
     import geopandas as gpd
+    try:
+        #collect data from web table
+        data=pd.read_html(requests.get("https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases").content)
+        data=data[0][["Places reporting cases","Sum of Cases"]]
+        
+    except ConnectionError:
+        mg.showerror("Connection Error", "No internet connection.")
+        
+    else:        
+        #read shp file
+        world_data=gpd.read_file("mapData/world_data.shp")
 
-    #collect data from web table
-    data=pd.read_html(requests.get("https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases").content)
-    data=data[0][["Places reporting cases","Sum of Cases"]]
+        #--rename countries in shp file to match the ones from web table--
+        world_data.replace('Burkina Faso', 'Burkina_Faso', inplace = True)
+        world_data.replace('Cape Verde', 'Cape_Verde', inplace = True)
+        world_data.replace('CentralAfricanRepublic', 'Central_African_Republic', inplace = True)        
+        world_data.replace('Cote d\'Ivoire', 'Cote_dIvoire', inplace = True)
+        world_data.replace('Democratic Republic of the Congo', 'Democratic_Republic_of_the_Congo', inplace = True)
+        world_data.replace('Equatorial Guinea', 'Equatorial_Guinea', inplace = True)
+        world_data.replace('Swaziland', 'Eswatini', inplace = True)
+        world_data.replace('Guinea-Bissau', 'Guinea_Bissau', inplace = True)
+        world_data.replace('Libyan Arab Jamahiriya', 'Libya', inplace = True)
+        world_data.replace('Sao Tome and Principe', 'Sao_Tome_and_Principe', inplace = True)
+        world_data.replace('Sierra Leone', 'Sierra_Leone', inplace = True)
+        world_data.replace('South Africa', 'South_Africa', inplace = True)
+        #world_data.replace('Sudan', 'South_Sudan', inplace = True)
+        world_data.replace('United Republic of Tanzania', 'United_Republic_of_Tanzania', inplace = True)
+        world_data.replace('Western Sahara', 'Western_Sahara', inplace = True)
+        world_data.replace('Antigua and Barbuda', 'Antigua_and_Barbuda', inplace = True)
+        world_data.replace('Netherlands Antilles', 'Bonaire, Saint Eustatius and Saba', inplace = True)
+        world_data.replace('British Virgin Islands', 'British_Virgin_Islands', inplace = True)
+        world_data.replace('Cayman Islands', 'Cayman_Islands', inplace = True)
+        world_data.replace('Costa Rica', 'Costa_Rica', inplace = True)
+        #world_data.replace('Netherlands Antilles', 'Curaçao', inplace = True)
+        world_data.replace('Dominican Republic', 'Dominican_Republic', inplace = True)
+        world_data.replace('El Salvador', 'El_Salvador', inplace = True)
+        world_data.replace('Falkland Islands (Malvinas)', 'Falkland_Islands_(Malvinas)', inplace = True)
+        world_data.replace('Puerto Rico', 'Puerto_Rico', inplace = True)
+        world_data.replace('Saint Kitts and Nevis', 'Saint_Kitts_and_Nevis', inplace = True)
+        world_data.replace('Saint Lucia', 'Saint_Lucia', inplace = True)
+        world_data.replace('Saint Vincent and the Grenadines', 'Saint_Vincent_and_the_Grenadines', inplace = True)
+        world_data.replace('Saint Martin', 'Sint_Maarten', inplace = True)
+        world_data.replace('Trinidad and Tobago', 'Trinidad_and_Tobago', inplace = True)
+        world_data.replace('Turks and Caicos Islands', 'Turks_and_Caicos_islands', inplace = True)
+        world_data.replace('United States', 'United_States_of_America', inplace = True)
+        world_data.replace('United States Virgin Islands', 'United_States_Virgin_Islands', inplace = True)
+        world_data.replace('Brunei Darussalam', 'Brunei_Darussalam', inplace = True)
+        world_data.replace('Iran (Islamic Republic of)', 'Iran', inplace = True)
+        world_data.replace('Lao People\'s Democratic Republic', 'Laos', inplace = True)
+        world_data.replace('Burma', 'Myanmar', inplace = True)
+        world_data.replace('Saudi Arabia', 'Saudi_Arabia', inplace = True)
+        world_data.replace('Korea, Republic of', 'South_Korea', inplace = True)
+        world_data.replace('Sri Lanka', 'Sri_Lanka', inplace = True)
+        world_data.replace('Syrian Arab Republic', 'Syria', inplace = True)
+        world_data.replace('Timor-Leste', 'Timor_Leste', inplace = True)
+        world_data.replace('United Arab Emirates', 'United_Arab_Emirates', inplace = True)
+        world_data.replace('Viet Nam', 'Vietnam', inplace = True)
+        world_data.replace('Bosnia and Herzegovina', 'Bosnia_and_Herzegovina', inplace = True)
+        world_data.replace('Czech Republic', 'Czechia', inplace = True)
+        world_data.replace('Faroe Islands', 'Faroe_Islands', inplace = True)
+        world_data.replace('Holy See(Vatican City)', 'Holy_See', inplace = True)
+        world_data.replace('Isle of Man', 'Isle_of_Man', inplace = True)
+        world_data.replace('Serbia', 'Kosovo', inplace = True)
+        world_data.replace('Republic of Moldova', 'Moldova', inplace = True)
+        world_data.replace('The former Yugoslav Republic of Macedonia', 'North_Macedonia', inplace = True)
+        world_data.replace('San Marino', 'San_Marino', inplace = True)
+        world_data.replace('United Kingdom', 'United_Kingdom', inplace = True)
+        world_data.replace('French Polynesia', 'French_Polynesia', inplace = True)
+        world_data.replace('New Caledonia', 'New_Caledonia', inplace = True)
+        world_data.replace('New Zealand', 'New_Zealand', inplace = True)
+        world_data.replace('Northern Mariana Islands', 'Northern_Mariana_Islands', inplace = True)
+        world_data.replace('Papua New Guinea', 'Papua_New_Guinea', inplace = True)
+        #world_data.replace('', 'Cases_on_an_international_conveyance_Japan', inplace = True)
 
-    #read shp file
-    world_data=gpd.read_file("mapData/world_data.shp")
+        #replace column name
+        data.rename(columns={"Places reporting cases":"NAME"},inplace=True)
 
-    #--rename countries in shp file to match the ones from web table--
-    world_data.replace('Burkina Faso', 'Burkina_Faso', inplace = True)
-    world_data.replace('Cape Verde', 'Cape_Verde', inplace = True)
-    world_data.replace('CentralAfricanRepublic', 'Central_African_Republic', inplace = True)        
-    world_data.replace('Cote d\'Ivoire', 'Cote_dIvoire', inplace = True)
-    world_data.replace('Democratic Republic of the Congo', 'Democratic_Republic_of_the_Congo', inplace = True)
-    world_data.replace('Equatorial Guinea', 'Equatorial_Guinea', inplace = True)
-    world_data.replace('Swaziland', 'Eswatini', inplace = True)
-    world_data.replace('Guinea-Bissau', 'Guinea_Bissau', inplace = True)
-    world_data.replace('Libyan Arab Jamahiriya', 'Libya', inplace = True)
-    world_data.replace('Sao Tome and Principe', 'Sao_Tome_and_Principe', inplace = True)
-    world_data.replace('Sierra Leone', 'Sierra_Leone', inplace = True)
-    world_data.replace('South Africa', 'South_Africa', inplace = True)
-    #world_data.replace('Sudan', 'South_Sudan', inplace = True)
-    world_data.replace('United Republic of Tanzania', 'United_Republic_of_Tanzania', inplace = True)
-    world_data.replace('Western Sahara', 'Western_Sahara', inplace = True)
-    world_data.replace('Antigua and Barbuda', 'Antigua_and_Barbuda', inplace = True)
-    world_data.replace('Netherlands Antilles', 'Bonaire, Saint Eustatius and Saba', inplace = True)
-    world_data.replace('British Virgin Islands', 'British_Virgin_Islands', inplace = True)
-    world_data.replace('Cayman Islands', 'Cayman_Islands', inplace = True)
-    world_data.replace('Costa Rica', 'Costa_Rica', inplace = True)
-    #world_data.replace('Netherlands Antilles', 'Curaçao', inplace = True)
-    world_data.replace('Dominican Republic', 'Dominican_Republic', inplace = True)
-    world_data.replace('El Salvador', 'El_Salvador', inplace = True)
-    world_data.replace('Falkland Islands (Malvinas)', 'Falkland_Islands_(Malvinas)', inplace = True)
-    world_data.replace('Puerto Rico', 'Puerto_Rico', inplace = True)
-    world_data.replace('Saint Kitts and Nevis', 'Saint_Kitts_and_Nevis', inplace = True)
-    world_data.replace('Saint Lucia', 'Saint_Lucia', inplace = True)
-    world_data.replace('Saint Vincent and the Grenadines', 'Saint_Vincent_and_the_Grenadines', inplace = True)
-    world_data.replace('Saint Martin', 'Sint_Maarten', inplace = True)
-    world_data.replace('Trinidad and Tobago', 'Trinidad_and_Tobago', inplace = True)
-    world_data.replace('Turks and Caicos Islands', 'Turks_and_Caicos_islands', inplace = True)
-    world_data.replace('United States', 'United_States_of_America', inplace = True)
-    world_data.replace('United States Virgin Islands', 'United_States_Virgin_Islands', inplace = True)
-    world_data.replace('Brunei Darussalam', 'Brunei_Darussalam', inplace = True)
-    world_data.replace('Iran (Islamic Republic of)', 'Iran', inplace = True)
-    world_data.replace('Lao People\'s Democratic Republic', 'Laos', inplace = True)
-    world_data.replace('Burma', 'Myanmar', inplace = True)
-    world_data.replace('Saudi Arabia', 'Saudi_Arabia', inplace = True)
-    world_data.replace('Korea, Republic of', 'South_Korea', inplace = True)
-    world_data.replace('Sri Lanka', 'Sri_Lanka', inplace = True)
-    world_data.replace('Syrian Arab Republic', 'Syria', inplace = True)
-    world_data.replace('Timor-Leste', 'Timor_Leste', inplace = True)
-    world_data.replace('United Arab Emirates', 'United_Arab_Emirates', inplace = True)
-    world_data.replace('Viet Nam', 'Vietnam', inplace = True)
-    world_data.replace('Bosnia and Herzegovina', 'Bosnia_and_Herzegovina', inplace = True)
-    world_data.replace('Czech Republic', 'Czechia', inplace = True)
-    world_data.replace('Faroe Islands', 'Faroe_Islands', inplace = True)
-    world_data.replace('Holy See(Vatican City)', 'Holy_See', inplace = True)
-    world_data.replace('Isle of Man', 'Isle_of_Man', inplace = True)
-    world_data.replace('Serbia', 'Kosovo', inplace = True)
-    world_data.replace('Republic of Moldova', 'Moldova', inplace = True)
-    world_data.replace('The former Yugoslav Republic of Macedonia', 'North_Macedonia', inplace = True)
-    world_data.replace('San Marino', 'San_Marino', inplace = True)
-    world_data.replace('United Kingdom', 'United_Kingdom', inplace = True)
-    world_data.replace('French Polynesia', 'French_Polynesia', inplace = True)
-    world_data.replace('New Caledonia', 'New_Caledonia', inplace = True)
-    world_data.replace('New Zealand', 'New_Zealand', inplace = True)
-    world_data.replace('Northern Mariana Islands', 'Northern_Mariana_Islands', inplace = True)
-    world_data.replace('Papua New Guinea', 'Papua_New_Guinea', inplace = True)
-    #world_data.replace('', 'Cases_on_an_international_conveyance_Japan', inplace = True)
+        #combine dataframes
+        combined_data=world_data.merge(data, on="NAME")
+        
+        #plot data
+        combined_data.plot(
+            column="Sum of Cases",
+            cmap="YlOrRd",
+            #legend=True,
+            figsize=(15, 10),
+            scheme='userdefined',
+            classification_kwds={'bins':[10,100,500,1000,5000,10000,15000,100000,150000,1000000,1500000,2000000]}).set_title("COVID-19 MAP", loc='center')
 
-    #replace column name
-    data.rename(columns={"Places reporting cases":"NAME"},inplace=True)
-
-    #combine dataframes
-    combined_data=world_data.merge(data, on="NAME")
-    
-    #plot data
-    combined_data.plot(
-        column="Sum of Cases",
-        cmap="YlOrRd",
-        #legend=True,
-        figsize=(15, 10),
-        scheme='userdefined',
-        classification_kwds={'bins':[10,100,500,1000,5000,10000,15000,100000,150000,1000000,1500000,2000000]}).set_title("COVID-19 MAP", loc='center')
-
-    plt.show()
+        plt.show()
 
 
     
