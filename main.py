@@ -33,6 +33,9 @@ source_value.set("A")
 selected_country=tk.StringVar()
 selected_country_2=tk.StringVar()
 
+checkbox_value=tk.IntVar()
+checkbox_value.set(0)
+dates=[]
 
 def evaluateSource():
     global countries, country_codes, country_options, country_options_2, selected_country, selected_country_2
@@ -199,20 +202,22 @@ def evaluateSource():
                         'Turkmenistan': 'TM', 'UAE': 'AE', 'Uganda': 'UG', 'United Kingdom': 'GB', 'Ukraine': 'UA',
                         'USA': 'US', 'Uruguay': 'UY', 'Uzbekistan': 'UZ', 'Vanuatu': 'VU', 'Venezuela': 'VE', 
                         'Vietnam': 'VN', 'Western Sahara': 'EH', 'Yemen': 'YE', 'Zambia': 'ZM', 'Zimbabwe': 'ZW'}
-    selected_country.set(country_codes["Afghanistan"])
-    selected_country_2.set(country_codes["Afghanistan"])
+
+    if selected_country.get()==None:
+        selected_country.set(country_codes["Afghanistan"])
+    elif selected_country_2.get()==None:
+        selected_country_2.set(country_codes["Afghanistan"])
 
     #Option Menus
     country_options=ttk.OptionMenu(left_frame, selected_country, *countries)
     country_options_2=ttk.OptionMenu(left_frame, selected_country_2, *countries)
     country_options.grid(row=1, column=0, sticky="we")
     country_options_2.grid(row=10, column=0, sticky="we")
-    country_options_2.config(state="disable")
+    if checkbox_value.get()==0:
+        country_options_2.config(state="disable")
 evaluateSource()
 
-checkbox_value=tk.IntVar()
-checkbox_value.set(0)
-dates=[]
+
 
 
 #def entries
@@ -240,8 +245,7 @@ def wallpaperCall():
 
 
 #process data for plotting and manage entries
-def processData(select_second_country=False, day_number=-1):
-    evaluateSource()  
+def processData(select_second_country=False, day_number=-1): 
                            
     global country_entry, confirmed_entry, deaths_entry, recovered_entry, active_entry, date_entry
     global country_entry_2, confirmed_entry_2, deaths_entry_2, recovered_entry_2, active_entry_2, date_entry_2
@@ -251,70 +255,25 @@ def processData(select_second_country=False, day_number=-1):
     fig=Figure(figsize=(6.5,5),dpi=100)
     
       
-    
-    #update source/selected_country error handling
-    if not selected_country.get().islower() and source_value.get()=="A":
-        selected_country.set(country_codes[selected_country.get()])
-    if len(selected_country.get())!=2 and source_value.get()=="B":
-        selected_country.set(country_codes[selected_country.get()])
-    if not(selected_country_2.get().islower()) and source_value.get()=="A":
-        selected_country_2.set(country_codes[selected_country_2.get()])
-    if len(selected_country_2.get())!=2 and source_value.get()=="B":
-        selected_country_2.set(country_codes[selected_country_2.get()])
-
     try:
-        if source_value.get()=="A":
-            #info request/query
-            api_requests_day_one=requests.get("https://api.covid19api.com/dayone/country/{}/status/confirmed".format(selected_country.get()))
-            api_day_one=json.loads(api_requests_day_one.content)
-            
-            for dict in api_day_one:                     
-                x_axis=(dict["Date"])
-                dates.append(x_axis)
-                y_axis=(dict["Cases"])
-                data.append((len(dates),y_axis))
-            x,y=zip(*data)
-            processed_data=(x,y)
-
+        #update source/selected_country error handling
+        if not selected_country.get().islower() and source_value.get()=="A":
+            selected_country.set(country_codes[selected_country.get()])
+        if len(selected_country.get())!=2 and source_value.get()=="B":
+            selected_country.set(country_codes[selected_country.get()])
+        if not(selected_country_2.get().islower()) and source_value.get()=="A":
+            selected_country_2.set(country_codes[selected_country_2.get()])
+        if len(selected_country_2.get())!=2 and source_value.get()=="B":
+            selected_country_2.set(country_codes[selected_country_2.get()])
+    except KeyError:
+        mg.showinfo("Error", "Source Error\nTry Updating Source")
+    else:
         
-            if select_second_country==False:
-                clearFrame(plot_frame)
-                #clear entries
-                country_entry.delete(0,'end')
-                confirmed_entry.delete(0,'end')
-                deaths_entry.delete(0,'end')
-                recovered_entry.delete(0,'end')
-                active_entry.delete(0,'end')
-                active_entry.delete(0,'end')
-                date_entry.delete(0,'end')
-                day_number_entry.delete(0,'end')
+        try:
+            if source_value.get()=="A":
                 #info request/query
-                status=requests.get("https://api.covid19api.com/live/country/{}/status/confirmed".format(selected_country.get()))
-                status=json.loads(status.content)
-                country_entry.insert(0,status[day_number]["Country"])
-                confirmed_entry.insert(0,status[day_number]["Confirmed"])
-                deaths_entry.insert(0,status[day_number]["Deaths"])
-                recovered_entry.insert(0,status[day_number]["Recovered"])
-                active_entry.insert(0,status[day_number]["Active"])
-                date_entry.insert(0,status[day_number]["Date"][:10])
-                
-                #search dta by date
-                day_number_entry.config(state="normal")
-                day_button.config(state="normal")
-                
-                #add data plot to figure
-                sub=fig.add_subplot(111)
-                sub.plot(processed_data[0],processed_data[1])
-                sub.set_xlabel("Time")
-                sub.set_ylabel("Confirmed Cases")
-                sub.set_title("{}´s Growing Curve".format(country_entry.get()))
-            
-            else:  
-                
-                clearFrame(plot_frame)
-                #info request/query
-                api_requests_one=requests.get("https://api.covid19api.com/dayone/country/{}/status/confirmed".format(selected_country_2.get()))
-                api_day_one=json.loads(api_requests_one.content)
+                api_requests_day_one=requests.get("https://api.covid19api.com/dayone/country/{}/status/confirmed".format(selected_country.get()))
+                api_day_one=json.loads(api_requests_day_one.content)
                 
                 for dict in api_day_one:                     
                     x_axis=(dict["Date"])
@@ -322,104 +281,99 @@ def processData(select_second_country=False, day_number=-1):
                     y_axis=(dict["Cases"])
                     data.append((len(dates),y_axis))
                 x,y=zip(*data)
-                processed_data_2=(x,y)
-                
-                #clear entries
-                country_entry_2.delete(0,'end')
-                confirmed_entry_2.delete(0,'end')
-                deaths_entry_2.delete(0,'end')
-                recovered_entry_2.delete(0,'end')
-                active_entry_2.delete(0,'end')
-                active_entry_2.delete(0,'end')
-                date_entry_2.delete(0,'end')
-                day_number_entry_2.delete(0,'end')
-                #info request/query
-                status=requests.get("https://api.covid19api.com/live/country/{}/status/confirmed".format(selected_country_2.get()))
-                status=json.loads(status.content)
-                country_entry_2.insert(0,status[day_number]["Country"])
-                confirmed_entry_2.insert(0,status[day_number]["Confirmed"])
-                deaths_entry_2.insert(0,status[day_number]["Deaths"])
-                recovered_entry_2.insert(0,status[day_number]["Recovered"])
-                active_entry_2.insert(0,status[day_number]["Active"])
-                date_entry_2.insert(0,status[day_number]["Date"][:10])
-                
-                #activate search data by date
-                day_number_entry_2.config(state="normal")
-                day_button_2.config(state="normal")
-                
-                #add data plots to figure
-                sub1=fig.add_subplot(211)
-                sub1.plot(processed_data[0],processed_data[1])
-                sub1.set_ylabel("{}".format(country_entry.get()))
-                sub1.set_title("Covid-19 Growing Rate")
-                
-                sub2=fig.add_subplot(212)
-                sub2.plot(processed_data_2[0],processed_data_2[1])
-                sub2.set_ylabel("{}".format(country_entry_2.get()))
-                sub2.set_xlabel("Time")
+                processed_data=(x,y)
 
-        
-        elif source_value.get()=="B":
-            #info request/query
-            api_requests_day_one=requests.get("https://api.thevirustracker.com/free-api?countryTimeline={}".format(selected_country.get()))
-            api_day_one=json.loads(api_requests_day_one.content)
-
-            dates=([*api_day_one['timelineitems'][0]])
-            dates.pop()
             
-            index=0
-            for i in dates:
-                index+=1
-                x_axis=(index) 
-                y_axis=(api_day_one['timelineitems'][0][i]['total_cases'])
-                data.append((x_axis,y_axis))
-            x,y=zip(*data)
-            processed_data=(x,y)
+                if select_second_country==False:
+                    clearFrame(plot_frame)
+                    #clear entries
+                    country_entry.delete(0,'end')
+                    confirmed_entry.delete(0,'end')
+                    deaths_entry.delete(0,'end')
+                    recovered_entry.delete(0,'end')
+                    active_entry.delete(0,'end')
+                    active_entry.delete(0,'end')
+                    date_entry.delete(0,'end')
+                    day_number_entry.delete(0,'end')
+                    #info request/query
+                    status=requests.get("https://api.covid19api.com/live/country/{}/status/confirmed".format(selected_country.get()))
+                    status=json.loads(status.content)
+                    country_entry.insert(0,status[day_number]["Country"])
+                    confirmed_entry.insert(0,status[day_number]["Confirmed"])
+                    deaths_entry.insert(0,status[day_number]["Deaths"])
+                    recovered_entry.insert(0,status[day_number]["Recovered"])
+                    active_entry.insert(0,status[day_number]["Active"])
+                    date_entry.insert(0,status[day_number]["Date"][:10])
+                    
+                    #search dta by date
+                    day_number_entry.config(state="normal")
+                    day_button.config(state="normal")
+                    
+                    #add data plot to figure
+                    sub=fig.add_subplot(111)
+                    sub.plot(processed_data[0],processed_data[1])
+                    sub.set_xlabel("Time")
+                    sub.set_ylabel("Confirmed Cases")
+                    sub.set_title("{}´s Growing Curve".format(country_entry.get()))
+                
+                else:  
+                    
+                    clearFrame(plot_frame)
+                    #info request/query
+                    api_requests_one=requests.get("https://api.covid19api.com/dayone/country/{}/status/confirmed".format(selected_country_2.get()))
+                    api_day_one=json.loads(api_requests_one.content)
+                    
+                    for dict in api_day_one:                     
+                        x_axis=(dict["Date"])
+                        dates.append(x_axis)
+                        y_axis=(dict["Cases"])
+                        data.append((len(dates),y_axis))
+                    x,y=zip(*data)
+                    processed_data_2=(x,y)
+                    
+                    #clear entries
+                    country_entry_2.delete(0,'end')
+                    confirmed_entry_2.delete(0,'end')
+                    deaths_entry_2.delete(0,'end')
+                    recovered_entry_2.delete(0,'end')
+                    active_entry_2.delete(0,'end')
+                    active_entry_2.delete(0,'end')
+                    date_entry_2.delete(0,'end')
+                    day_number_entry_2.delete(0,'end')
+                    #info request/query
+                    status=requests.get("https://api.covid19api.com/live/country/{}/status/confirmed".format(selected_country_2.get()))
+                    status=json.loads(status.content)
+                    country_entry_2.insert(0,status[day_number]["Country"])
+                    confirmed_entry_2.insert(0,status[day_number]["Confirmed"])
+                    deaths_entry_2.insert(0,status[day_number]["Deaths"])
+                    recovered_entry_2.insert(0,status[day_number]["Recovered"])
+                    active_entry_2.insert(0,status[day_number]["Active"])
+                    date_entry_2.insert(0,status[day_number]["Date"][:10])
+                    
+                    #activate search data by date
+                    day_number_entry_2.config(state="normal")
+                    day_button_2.config(state="normal")
+                    
+                    #add data plots to figure
+                    sub1=fig.add_subplot(211)
+                    sub1.plot(processed_data[0],processed_data[1])
+                    sub1.set_ylabel("{}".format(country_entry.get()))
+                    sub1.set_title("Covid-19 Growing Rate")
+                    
+                    sub2=fig.add_subplot(212)
+                    sub2.plot(processed_data_2[0],processed_data_2[1])
+                    sub2.set_ylabel("{}".format(country_entry_2.get()))
+                    sub2.set_xlabel("Time")
 
-        
-            if select_second_country==False:
-                clearFrame(plot_frame)
-                #clear entries
-                country_entry.delete(0,'end')
-                confirmed_entry.delete(0,'end')
-                deaths_entry.delete(0,'end')
-                recovered_entry.delete(0,'end')
-                active_entry.delete(0,'end')
-                active_entry.delete(0,'end')
-                date_entry.delete(0,'end')
-                day_number_entry.delete(0,'end')
-                #info request/query
-                status=requests.get("https://api.thevirustracker.com/free-api?countryTimeline={}".format(selected_country.get()))
-                status=json.loads(status.content)
-                country_entry.insert(0, api_day_one['countrytimelinedata'][0]["info"]["title"])
-                confirmed_entry.insert(0, api_day_one['timelineitems'][0][dates[day_number]]["total_cases"])
-                deaths_entry.insert(0, api_day_one['timelineitems'][0][dates[day_number]]["total_deaths"])
-                recovered_entry.insert(0, api_day_one['timelineitems'][0][dates[day_number]]["total_recoveries"])
-                active_entry.insert(0, int(api_day_one['timelineitems'][0][dates[day_number]]["total_cases"])-(int(api_day_one['timelineitems'][0][dates[day_number]]["total_recoveries"])+int(api_day_one['timelineitems'][0][dates[day_number]]["total_deaths"])))
-                date_entry.insert(0,dates[day_number])
-                
-                #search dta by date
-                day_number_entry.config(state="normal")
-                day_button.config(state="normal")
-                
-                #add data plot to figure
-                sub=fig.add_subplot(111)
-                sub.plot(processed_data[0],processed_data[1])
-                sub.set_xlabel("Time")
-                sub.set_ylabel("Confirmed Cases")
-                sub.set_title("{}´s Growing Curve".format(country_entry.get()))
             
-            else:  
-                
-                clearFrame(plot_frame)
+            elif source_value.get()=="B":
                 #info request/query
-                api_requests_day_one=requests.get("https://api.thevirustracker.com/free-api?countryTimeline={}".format(selected_country_2.get()))
+                api_requests_day_one=requests.get("https://api.thevirustracker.com/free-api?countryTimeline={}".format(selected_country.get()))
                 api_day_one=json.loads(api_requests_day_one.content)
-                
+
                 dates=([*api_day_one['timelineitems'][0]])
                 dates.pop()
-
-                data=[]
+                
                 index=0
                 for i in dates:
                     index+=1
@@ -427,59 +381,112 @@ def processData(select_second_country=False, day_number=-1):
                     y_axis=(api_day_one['timelineitems'][0][i]['total_cases'])
                     data.append((x_axis,y_axis))
                 x,y=zip(*data)
-                processed_data_2=(x,y)
-                
-                #clear entries
-                country_entry_2.delete(0,'end')
-                confirmed_entry_2.delete(0,'end')
-                deaths_entry_2.delete(0,'end')
-                recovered_entry_2.delete(0,'end')
-                active_entry_2.delete(0,'end')
-                active_entry_2.delete(0,'end')
-                date_entry_2.delete(0,'end')
-                day_number_entry_2.delete(0,'end')
-                #info request/query
-                status=requests.get("https://api.thevirustracker.com/free-api?countryTimeline={}".format(selected_country_2.get()))
-                status=json.loads(status.content)
-                country_entry_2.insert(0, api_day_one['countrytimelinedata'][0]["info"]["title"])
-                confirmed_entry_2.insert(0, api_day_one['timelineitems'][0][dates[day_number]]["total_cases"])
-                deaths_entry_2.insert(0, api_day_one['timelineitems'][0][dates[day_number]]["total_deaths"])
-                recovered_entry_2.insert(0, api_day_one['timelineitems'][0][dates[day_number]]["total_recoveries"])
-                active_entry_2.insert(0, int(api_day_one['timelineitems'][0][dates[day_number]]["total_cases"])-(int(api_day_one['timelineitems'][0][dates[day_number]]["total_recoveries"])+int(api_day_one['timelineitems'][0][dates[day_number]]["total_deaths"])))
-                date_entry_2.insert(0,dates[day_number])
-                
-                #activate search data by date
-                day_number_entry_2.config(state="normal")
-                day_button_2.config(state="normal")
-                
-                #add data plots to figure
-                sub1=fig.add_subplot(211)
-                sub1.plot(processed_data[0],processed_data[1])
-                sub1.set_ylabel("{}".format(country_entry.get()))
-                sub1.set_title("Covid-19 Growing Rate")
-                
-                sub2=fig.add_subplot(212)
-                sub2.plot(processed_data_2[0],processed_data_2[1])
-                sub2.set_ylabel("{}".format(country_entry_2.get()))
-                sub2.set_xlabel("Time")
-        
-        
- 
-    except:
-       mg.showinfo("Error", "Not Enough Data \nTry another data source\n or check your internet connection.")
-        
-    
-    else:
-        #add figure to canvas
-        canvas=FigureCanvasTkAgg(fig, master=plot_frame)
-        canvas.draw()
-        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
-        
-        #pack canvas into plot_frame
-        toolbar=NavigationToolbar2Tk(canvas, plot_frame)
-        toolbar.update()
-        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+                processed_data=(x,y)
+
             
+                if select_second_country==False:
+                    clearFrame(plot_frame)
+                    #clear entries
+                    country_entry.delete(0,'end')
+                    confirmed_entry.delete(0,'end')
+                    deaths_entry.delete(0,'end')
+                    recovered_entry.delete(0,'end')
+                    active_entry.delete(0,'end')
+                    active_entry.delete(0,'end')
+                    date_entry.delete(0,'end')
+                    day_number_entry.delete(0,'end')
+                    #info request/query
+                    status=requests.get("https://api.thevirustracker.com/free-api?countryTimeline={}".format(selected_country.get()))
+                    status=json.loads(status.content)
+                    country_entry.insert(0, api_day_one['countrytimelinedata'][0]["info"]["title"])
+                    confirmed_entry.insert(0, api_day_one['timelineitems'][0][dates[day_number]]["total_cases"])
+                    deaths_entry.insert(0, api_day_one['timelineitems'][0][dates[day_number]]["total_deaths"])
+                    recovered_entry.insert(0, api_day_one['timelineitems'][0][dates[day_number]]["total_recoveries"])
+                    active_entry.insert(0, int(api_day_one['timelineitems'][0][dates[day_number]]["total_cases"])-(int(api_day_one['timelineitems'][0][dates[day_number]]["total_recoveries"])+int(api_day_one['timelineitems'][0][dates[day_number]]["total_deaths"])))
+                    date_entry.insert(0,dates[day_number])
+                    
+                    #search dta by date
+                    day_number_entry.config(state="normal")
+                    day_button.config(state="normal")
+                    
+                    #add data plot to figure
+                    sub=fig.add_subplot(111)
+                    sub.plot(processed_data[0],processed_data[1])
+                    sub.set_xlabel("Time")
+                    sub.set_ylabel("Confirmed Cases")
+                    sub.set_title("{}´s Growing Curve".format(country_entry.get()))
+                
+                else:  
+                    
+                    clearFrame(plot_frame)
+                    #info request/query
+                    api_requests_day_one=requests.get("https://api.thevirustracker.com/free-api?countryTimeline={}".format(selected_country_2.get()))
+                    api_day_one=json.loads(api_requests_day_one.content)
+                    
+                    dates=([*api_day_one['timelineitems'][0]])
+                    dates.pop()
+
+                    data=[]
+                    index=0
+                    for i in dates:
+                        index+=1
+                        x_axis=(index) 
+                        y_axis=(api_day_one['timelineitems'][0][i]['total_cases'])
+                        data.append((x_axis,y_axis))
+                    x,y=zip(*data)
+                    processed_data_2=(x,y)
+                    
+                    #clear entries
+                    country_entry_2.delete(0,'end')
+                    confirmed_entry_2.delete(0,'end')
+                    deaths_entry_2.delete(0,'end')
+                    recovered_entry_2.delete(0,'end')
+                    active_entry_2.delete(0,'end')
+                    active_entry_2.delete(0,'end')
+                    date_entry_2.delete(0,'end')
+                    day_number_entry_2.delete(0,'end')
+                    #info request/query
+                    status=requests.get("https://api.thevirustracker.com/free-api?countryTimeline={}".format(selected_country_2.get()))
+                    status=json.loads(status.content)
+                    country_entry_2.insert(0, api_day_one['countrytimelinedata'][0]["info"]["title"])
+                    confirmed_entry_2.insert(0, api_day_one['timelineitems'][0][dates[day_number]]["total_cases"])
+                    deaths_entry_2.insert(0, api_day_one['timelineitems'][0][dates[day_number]]["total_deaths"])
+                    recovered_entry_2.insert(0, api_day_one['timelineitems'][0][dates[day_number]]["total_recoveries"])
+                    active_entry_2.insert(0, int(api_day_one['timelineitems'][0][dates[day_number]]["total_cases"])-(int(api_day_one['timelineitems'][0][dates[day_number]]["total_recoveries"])+int(api_day_one['timelineitems'][0][dates[day_number]]["total_deaths"])))
+                    date_entry_2.insert(0,dates[day_number])
+                    
+                    #activate search data by date
+                    day_number_entry_2.config(state="normal")
+                    day_button_2.config(state="normal")
+                    
+                    #add data plots to figure
+                    sub1=fig.add_subplot(211)
+                    sub1.plot(processed_data[0],processed_data[1])
+                    sub1.set_ylabel("{}".format(country_entry.get()))
+                    sub1.set_title("Covid-19 Growing Rate")
+                    
+                    sub2=fig.add_subplot(212)
+                    sub2.plot(processed_data_2[0],processed_data_2[1])
+                    sub2.set_ylabel("{}".format(country_entry_2.get()))
+                    sub2.set_xlabel("Time")
+            
+            
+    
+        except:
+            mg.showinfo("Error", "Not Enough Data \nTry another data source\n or check your internet connection.")
+            
+        
+        else:
+            #add figure to canvas
+            canvas=FigureCanvasTkAgg(fig, master=plot_frame)
+            canvas.draw()
+            canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+            
+            #pack canvas into plot_frame
+            toolbar=NavigationToolbar2Tk(canvas, plot_frame)
+            toolbar.update()
+            canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+                
 
 
         
