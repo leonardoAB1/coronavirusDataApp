@@ -241,6 +241,7 @@ def wallpaperCall():
 
 #process data for plotting and manage entries
 def processData(select_second_country=False, day_number=-1):
+    evaluateSource()  
                            
     global country_entry, confirmed_entry, deaths_entry, recovered_entry, active_entry, date_entry
     global country_entry_2, confirmed_entry_2, deaths_entry_2, recovered_entry_2, active_entry_2, date_entry_2
@@ -248,6 +249,8 @@ def processData(select_second_country=False, day_number=-1):
     global dates                          
     data=[]
     fig=Figure(figsize=(6.5,5),dpi=100)
+    
+      
     
     #update source/selected_country error handling
     if not selected_country.get().islower() and source_value.get()=="A":
@@ -345,15 +348,15 @@ def processData(select_second_country=False, day_number=-1):
                 day_button_2.config(state="normal")
                 
                 #add data plots to figure
-                sub=fig.add_subplot(211)
-                sub.plot(processed_data[0],processed_data[1])
-                sub.set_ylabel("{}".format(country_entry.get()))
-                sub.set_title("Covid-19 Growing Rate")
+                sub1=fig.add_subplot(211)
+                sub1.plot(processed_data[0],processed_data[1])
+                sub1.set_ylabel("{}".format(country_entry.get()))
+                sub1.set_title("Covid-19 Growing Rate")
                 
-                sub=fig.add_subplot(212)
-                sub.plot(processed_data_2[0],processed_data_2[1])
-                sub.set_ylabel("{}".format(country_entry_2.get()))
-                sub.set_xlabel("Time")
+                sub2=fig.add_subplot(212)
+                sub2.plot(processed_data_2[0],processed_data_2[1])
+                sub2.set_ylabel("{}".format(country_entry_2.get()))
+                sub2.set_xlabel("Time")
 
         
         elif source_value.get()=="B":
@@ -450,20 +453,20 @@ def processData(select_second_country=False, day_number=-1):
                 day_button_2.config(state="normal")
                 
                 #add data plots to figure
-                sub=fig.add_subplot(211)
-                sub.plot(processed_data[0],processed_data[1])
-                sub.set_ylabel("{}".format(country_entry.get()))
-                sub.set_title("Covid-19 Growing Rate")
+                sub1=fig.add_subplot(211)
+                sub1.plot(processed_data[0],processed_data[1])
+                sub1.set_ylabel("{}".format(country_entry.get()))
+                sub1.set_title("Covid-19 Growing Rate")
                 
-                sub=fig.add_subplot(212)
-                sub.plot(processed_data_2[0],processed_data_2[1])
-                sub.set_ylabel("{}".format(country_entry_2.get()))
-                sub.set_xlabel("Time")
+                sub2=fig.add_subplot(212)
+                sub2.plot(processed_data_2[0],processed_data_2[1])
+                sub2.set_ylabel("{}".format(country_entry_2.get()))
+                sub2.set_xlabel("Time")
         
         
  
     except:
-       mg.showinfo("Error", "Not Enough Data\n for Plotting \nTry another data source\n or check your internet connection.")
+       mg.showinfo("Error", "Not Enough Data \nTry another data source\n or check your internet connection.")
         
     
     else:
