@@ -255,11 +255,11 @@ def processData(select_second_country=False, day_number=-1):
     #update source/selected_country error handling
     if not selected_country.get().islower() and source_value.get()=="A":
         selected_country.set(country_codes[selected_country.get()])
-    elif len(selected_country.get())!=2 and source_value.get()=="B":
+    if len(selected_country.get())!=2 and source_value.get()=="B":
         selected_country.set(country_codes[selected_country.get()])
-    elif not selected_country_2.get().islower() and source_value.get()=="A":
+    if not(selected_country_2.get().islower()) and source_value.get()=="A":
         selected_country_2.set(country_codes[selected_country_2.get()])
-    elif len(selected_country_2.get())!=2 and source_value.get()=="B":
+    if len(selected_country_2.get())!=2 and source_value.get()=="B":
         selected_country_2.set(country_codes[selected_country_2.get()])
 
     try:
@@ -415,7 +415,7 @@ def processData(select_second_country=False, day_number=-1):
                 #info request/query
                 api_requests_day_one=requests.get("https://api.thevirustracker.com/free-api?countryTimeline={}".format(selected_country_2.get()))
                 api_day_one=json.loads(api_requests_day_one.content)
-
+                
                 dates=([*api_day_one['timelineitems'][0]])
                 dates.pop()
 
